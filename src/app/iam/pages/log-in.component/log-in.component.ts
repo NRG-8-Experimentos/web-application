@@ -45,4 +45,8 @@ export class LogInComponent {
     this.authService.signIn(new SignInRequest(username, password));
     this.submitted = true;
   }
+
+  onGotoSignUp() {
+    this.router.navigate(['/sign-up']).then();
+  }
 }
