@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {SignInRequest} from '../../model/requests/sign-in.request';
 import { HttpClientModule } from '@angular/common/http';
+import {LoginEventService} from '../../services/login-event.service';
 
 @Component({
   selector: 'app-log-in',
@@ -25,7 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class LogInComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService : AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService : AuthService, private router: Router, private loginEventService: LoginEventService) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -33,9 +34,6 @@ export class LogInComponent {
   }
   submitted = false;
 
-  ngOnInit(): void {
-
-  }
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
@@ -44,6 +42,7 @@ export class LogInComponent {
 
     this.authService.signIn(new SignInRequest(username, password));
     this.submitted = true;
+    this.loginEventService.emitLoginSuccess();
   }
 
   onGotoSignUp() {

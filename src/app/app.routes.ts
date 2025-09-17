@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import {LogInComponent} from './iam/pages/log-in.component/log-in.component';
-import {SignUpComponent} from './iam/pages/sign-up.component/sign-up.component';
-import {MainMemberComponent} from './shared/pages/main-member.component/main-member.component';
-import {MainLeaderComponent} from './shared/pages/main-leader.component/main-leader.component';
+import {SignUpComponent} from './iam/pages/sign-up/sign-up.component';
+import {MainMemberComponent} from './shared/pages/main-member/main-member.component';
+import {MainLeaderComponent} from './shared/pages/main-leader/main-leader.component';
 import {MainComponent} from './public/pages/main/main.component';
 import {authGuard} from './iam/services/auth-guard';
 

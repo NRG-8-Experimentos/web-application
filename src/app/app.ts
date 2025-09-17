@@ -1,10 +1,19 @@
 import {Component, signal, ViewChild} from '@angular/core';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material/sidenav';
+import {SidenavComponent} from './shared/components/sidenav.component/sidenav.component';
+import {BodyComponent} from './shared/pages/body/body.component';
+import {NgIf} from '@angular/common';
+import {LoginEventService} from './iam/services/login-event.service';
+
+interface SideNavToggle{
+  screenWidth: number;
+  collapsed: boolean;
+}
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterOutlet, RouterOutlet, RouterOutlet],
+  imports: [SidenavComponent, BodyComponent, NgIf,],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -32,16 +41,21 @@ export class App {
     {icon: '', path: '/leaders/reports', title: 'Mi desempeño'},
     {icon: '', path: '/sign-in', title: 'Cerrar Sesión'}
   ];
-  constructor(private router: Router) {
+
+  constructor(private router: Router, private loginEventService: LoginEventService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const currentRoute = this.router.url;
         if (currentRoute.includes('sign-in') || currentRoute.includes('sign-up')) {
           localStorage.clear();
+          this.screenWidth = 0;
         }
         this.showSideBar = !(currentRoute.includes('sign-in') || currentRoute.includes('sign-up'));
         console.log('Ruta actual:', currentRoute);
         console.log('showToolbar:', this.showSideBar);
+        this.loginEventService.loginSuccess$.subscribe(() => {
+          this.screenWidth = 1;
+        });
       }
     });
     this.setRedirect();
@@ -61,5 +75,13 @@ export class App {
 
   get isLeader(): boolean {
     return localStorage.getItem('role') === 'ROLE_LEADER';
+  }
+
+  isSideNavCollapsed = false;
+  screenWidth = 0;
+
+  onToggleSideNav(data: SideNavToggle): void {
+    this.screenWidth = data.screenWidth;
+    this.isSideNavCollapsed = data.collapsed;
   }
 }
