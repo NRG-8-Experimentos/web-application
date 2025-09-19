@@ -1,5 +1,12 @@
 <main>
   <div class="screen">
-    <router-outlet></router-outlet>
+    <app-sidenav
+      *ngIf="showSideBar"
+      [navData]="isLeader ? optionsLeader : optionsMember"
+      (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+    <app-body
+      [collapsed]="isSideNavCollapsed"
+      [screenWidth]="screenWidth"
+    ></app-body>
   </div>
 </main>
